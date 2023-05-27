@@ -8,8 +8,6 @@ package nlp;
  *
  * @author ethan
  */
-public interface IStringCleaner {
-    public String[] getSentences(String content);
-    public String cleanString(String string);
-    public String[] generateWordDictionary(String content);
+public interface IUserInterface {
+    public String pickFilePath();
 }

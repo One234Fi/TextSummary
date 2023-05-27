@@ -11,26 +11,33 @@ import java.util.HashMap;
  * @author ethan
  */
 public class StringVectorizer implements IStringVectorizer {
-    //the list of content words from the main body of text
-    private final String[] wordDictionary;
     
     /**
-     * constructor
+     * Given a list of sentences and content words, vectorize all of the sentences
      * 
-     * @param dictionary all of the content words in the body of text being vectorized 
+     * @param contentSentences the sentences to be vectorized
+     * @param wordDictionary the content words to use
+     * @return an array of vectorized sentences represented as double arrays
      */
-    public StringVectorizer(String[] dictionary) {
-        this.wordDictionary = dictionary;
+    @Override
+    public double[][] getVectorizedData(String[] contentSentences, String[] wordDictionary) {
+        //Parallelize this, preferably sooner rather than later
+        double[][] vectorizedSentences = new double[contentSentences.length][wordDictionary.length]; 
+        for (int i = 0; i < contentSentences.length; i++) {
+            vectorizedSentences[i] = getVectorizedString(contentSentences[i], wordDictionary);
+        }
+        return vectorizedSentences;
     }
     
     /**
      * Creates a vector representation of a string using the word dictionary as a basis
      * 
      * @param sentence the string to be vectorized
+     * @param wordDictionary the list of words in the entire body of content
      * @return a double array representing the word count for each word in the original string
      */
     @Override
-    public double[] getVectorizedString(String sentence) {
+    public double[] getVectorizedString(String sentence, String[] wordDictionary) {
         double[] vectorRepresentation = new double[wordDictionary.length];
         HashMap<String, Integer> wordCount = getWordOccurences(sentence.split(" "));
         

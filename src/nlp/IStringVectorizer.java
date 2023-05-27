@@ -9,5 +9,6 @@ package nlp;
  * @author ethan
  */
 public interface IStringVectorizer {
-    public double[] getVectorizedString(String string);
+    public double[][] getVectorizedData (String[] contentSentences, String[] wordDictionary);
+    public double[] getVectorizedString(String string, String[] wordDictionary);
 }

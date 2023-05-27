@@ -9,5 +9,5 @@ package nlp;
  * @author ethan
  */
 public interface IFileReader {
-    
+    public String getText(String filePath);
 }

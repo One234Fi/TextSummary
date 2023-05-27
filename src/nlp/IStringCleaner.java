@@ -9,5 +9,5 @@ package nlp;
  * @author ethan
  */
 public interface IStringCleaner {
-    
+    public String cleanString(String string);
 }

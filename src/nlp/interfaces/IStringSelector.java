@@ -8,7 +8,7 @@ package nlp.interfaces;
  *
  * @author ethan
  */
-public interface IRelevanceMetric {
-    public double[] getRelevanceScores(String[] content);
-    public double getRelevance(String string);
+public interface IStringSelector {
+    public double[] combineMetrics(double[] similarityScores, double[] relevanceScores);
+    public String[] selectStrings(String[] content, double[] scores);
 }

@@ -4,12 +4,8 @@
  */
 package nlp.classes;
 
-import nlp.interfaces.IFileReader;
-import nlp.interfaces.IRelevanceMetric;
-import nlp.interfaces.ISimilarityMetric;
-import nlp.interfaces.IStringCleaner;
-import nlp.interfaces.IStringVectorizer;
-import nlp.interfaces.IUserInterface;
+import nlp.interfaces.*;
+
 
 /**
  * select file - IUserInterface
@@ -29,6 +25,7 @@ public class TextSummarizer {
     private IStringVectorizer stringVectorizer;
     private ISimilarityMetric similarityMetric;
     private IRelevanceMetric relevanceMetric;
+    private IStringSelector stringSelector;
     
     public TextSummarizer(
             IUserInterface ui, 
@@ -36,13 +33,15 @@ public class TextSummarizer {
             IStringCleaner stringCleaner, 
             IStringVectorizer stringVectorizer, 
             ISimilarityMetric similarityMetric, 
-            IRelevanceMetric relevanceMetric) {
+            IRelevanceMetric relevanceMetric,
+            IStringSelector stringSelector) {
         this.ui = ui;
         this.fileReader = fileReader;
         this.stringCleaner = stringCleaner;
         this.stringVectorizer = stringVectorizer;
         this.similarityMetric = similarityMetric;
         this.relevanceMetric = relevanceMetric;
+        this.stringSelector = stringSelector;
     }
     
     public void start() {
@@ -58,11 +57,17 @@ public class TextSummarizer {
         double[][] vectorizedSentences = stringVectorizer.getVectorizedData(contentSentences, wordDictionary);
         
         //check how similar each sentence is compared to all the others and divide by amt of sentences
+        double[] similarityScores = similarityMetric.getSimilarityScores(vectorizedSentences);
         
         //calculate relevance scores
+        double[] relevanceScores = relevanceMetric.getRelevanceScores(contentSentences);
         
         //combine similarity and relevance scores
-        
+        double[] combinedScores = stringSelector.combineMetrics(similarityScores, relevanceScores);
         //select top scoring strings
+        String[] output = stringSelector.selectStrings(contentSentences, combinedScores);
+        for (String s : output) {
+            System.out.println(s);
+        }
     }
 }

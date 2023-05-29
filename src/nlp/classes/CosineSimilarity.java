@@ -10,6 +10,12 @@ import nlp.interfaces.ISimilarityMetric;
  */
 public class CosineSimilarity implements ISimilarityMetric {
     
+    @Override
+    public double[] getSimilarityScores(double[][] vectors) {
+        
+        return null;
+    }
+    
     /**
      * Calculate the similarity of two double arrays
      * 

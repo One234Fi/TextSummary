@@ -4,6 +4,14 @@
  */
 package nlp.classes;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import nlp.interfaces.*;
 
 
@@ -49,6 +57,8 @@ public class TextSummarizer {
         String filePath = ui.pickFilePath();
         String contentText = fileReader.getText(filePath);
         
+        Set<String> stopWords = getStopWords();
+        
         //clean data
         String[] contentSentences = stringCleaner.getSentences(contentText);
         String[] wordDictionary = stringCleaner.generateWordDictionary(contentText);
@@ -60,7 +70,7 @@ public class TextSummarizer {
         double[] similarityScores = similarityMetric.getSimilarityScores(vectorizedSentences);
         
         //calculate relevance scores
-        double[] relevanceScores = relevanceMetric.getRelevanceScores(contentSentences);
+        double[] relevanceScores = relevanceMetric.getRelevanceScores(contentText, stopWords, contentSentences);
         
         //combine similarity and relevance scores
         double[] combinedScores = stringSelector.combineMetrics(similarityScores, relevanceScores);
@@ -69,5 +79,18 @@ public class TextSummarizer {
         for (String s : output) {
             System.out.println(s);
         }
+    }
+    
+    private Set<String> getStopWords() {
+        Set<String> stopWords = new HashSet<>();
+        
+        try {
+            stopWords.addAll(Files.readAllLines(Paths.get("src/nlp/stopWords.txt")));
+        }
+        catch (IOException e) {
+            System.out.println(e.toString());
+        }
+        
+        return stopWords;
     }
 }

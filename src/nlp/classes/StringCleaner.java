@@ -15,6 +15,11 @@ import nlp.interfaces.IStringCleaner;
  */
 public class StringCleaner implements IStringCleaner {
 
+    /**
+     * 
+     * @param content the text to be split into sentences
+     * @return an array of sentences with the punctuation stripped
+     */
     @Override
     public String[] getSentences(String content) {
         String[] sentences = content.split(".");
@@ -25,11 +30,21 @@ public class StringCleaner implements IStringCleaner {
         return sentences;
     }
 
+    /**
+     * 
+     * @param string a string to be cleaned
+     * @return a cleaned version of the input
+     */
     @Override
     public String cleanString(String string) {
         return string.replaceAll("\\p{Punct}|\\P{Print}|[0-9]", "").trim();
     }
 
+    /**
+     * 
+     * @param content a body of text
+     * @return an array of content words derived from the parameter
+     */
     @Override
     public String[] generateWordDictionary(String content) {
         Set<String> dictionary = new HashSet<>();

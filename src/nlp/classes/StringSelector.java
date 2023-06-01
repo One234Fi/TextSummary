@@ -4,7 +4,6 @@
  */
 package nlp.classes;
 
-import java.util.Arrays;
 import nlp.interfaces.IStringSelector;
 
 /**

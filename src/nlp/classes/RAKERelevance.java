@@ -20,6 +20,13 @@ public class RAKERelevance implements IRelevanceMetric {
     //this class should def be refactored with a constructor or something so that getRelevance can't be called while keyPhrases is null
     private String[] keyPhrases;
     
+    /**
+     * 
+     * @param content the main body of text that sentences and stopWords came from
+     * @param stopWords a set of stop words used to split content
+     * @param sentences the strings that need relevance scores calculate
+     * @return an array of relevance scores corresponding to the sentences parameter
+     */
     @Override
     public double[] getRelevanceScores(String content, Set<String> stopWords, String[] sentences) {
         String[] candidatePhrases = getCandidatePhrases(content, stopWords);
@@ -34,6 +41,11 @@ public class RAKERelevance implements IRelevanceMetric {
         return relevanceScores;
     }
     
+    /**
+     * 
+     * @param string a string to determine a relevance score for
+     * @return a relevance score for the input
+     */
     @Override
     public double getRelevance(String string) {
         //very barebones and probably inefficient scoring

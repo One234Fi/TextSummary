@@ -9,11 +9,25 @@ import nlp.interfaces.ISimilarityMetric;
  * @author ethan
  */
 public class CosineSimilarity implements ISimilarityMetric {
-    
+    /**
+     * a quick and dirty brute force implementation, once everything works this 
+     * method should be overwritten with something better (use maps or concurrency of something)
+     * 
+     * @param vectors the list of vectorized strings
+     * @return an array of similarity scores for each vector
+     */
     @Override
     public double[] getSimilarityScores(double[][] vectors) {
-        
-        return null;
+        double[] scores = new double[vectors.length];
+        double scoreSum;
+        for (int i = 0; i < vectors.length; i++) {
+            scoreSum = 0;
+            for (int j = 0; j < vectors.length; j++) {
+                scoreSum += getSimilarity(vectors[i], vectors[j]);
+            }
+            scores[i] = scoreSum / vectors.length;
+        }
+        return scores;
     }
     
     /**

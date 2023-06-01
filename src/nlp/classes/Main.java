@@ -9,7 +9,10 @@ package nlp.classes;
  * @author ethan
  */
 public class Main {
-    //initialize a text summarizer object and call its start method
+    /**
+     * initialize a text summarizer object and call its start method
+     * 
+     */
     public static void main(String[] args) {
         
     }

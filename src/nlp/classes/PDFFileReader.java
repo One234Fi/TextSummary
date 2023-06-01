@@ -6,8 +6,6 @@ package nlp.classes;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import nlp.interfaces.IFileReader;

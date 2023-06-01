@@ -7,11 +7,8 @@ package nlp.classes;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import nlp.interfaces.*;
 
 
@@ -27,14 +24,25 @@ import nlp.interfaces.*;
  * @author ethan
  */
 public class TextSummarizer {
-    private IUserInterface ui;
-    private IFileReader fileReader;
-    private IStringCleaner stringCleaner;
-    private IStringVectorizer stringVectorizer;
-    private ISimilarityMetric similarityMetric;
-    private IRelevanceMetric relevanceMetric;
-    private IStringSelector stringSelector;
+    private final IUserInterface ui;
+    private final IFileReader fileReader;
+    private final IStringCleaner stringCleaner;
+    private final IStringVectorizer stringVectorizer;
+    private final ISimilarityMetric similarityMetric;
+    private final IRelevanceMetric relevanceMetric;
+    private final IStringSelector stringSelector;
     
+    /**
+     * Instantiates a text summarizer object that utilizes the specified modules
+     * 
+     * @param ui
+     * @param fileReader
+     * @param stringCleaner
+     * @param stringVectorizer
+     * @param similarityMetric
+     * @param relevanceMetric
+     * @param stringSelector 
+     */
     public TextSummarizer(
             IUserInterface ui, 
             IFileReader fileReader, 
@@ -52,6 +60,9 @@ public class TextSummarizer {
         this.stringSelector = stringSelector;
     }
     
+    /**
+     * calls the methods to generate a summary
+     */
     public void start() {
         //find and read file
         String filePath = ui.pickFilePath();

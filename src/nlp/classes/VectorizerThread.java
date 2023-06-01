@@ -12,13 +12,20 @@ import nlp.interfaces.IStringVectorizer;
  */
 public class VectorizerThread implements Runnable {
     //reference to array, index to modify, the string to vectorize
-    private double[][] reference;
-    private int indexToModify;
-    private String string;
-    private String[] wordDictionary;
-    private IStringVectorizer vectorizerType;
+    private final double[][] reference;
+    private final int indexToModify;
+    private final String string;
+    private final String[] wordDictionary;
+    private final IStringVectorizer vectorizerType;
     
-    //holy boilerplate batman
+    /**
+     * 
+     * @param reference an array to write to (probably bad practice but I'll worry about it later)
+     * @param indexToModify the specific index of the array to modify
+     * @param string the string that needs to be vectorized
+     * @param wordDictionary the dictionary that will be used as a vector template
+     * @param vectorizer the specific implementation to use
+     */
     public VectorizerThread(double[][] reference, int indexToModify, String string, String[] wordDictionary, IStringVectorizer vectorizer) {
         this.reference = reference;
         this.indexToModify = indexToModify;
@@ -27,7 +34,9 @@ public class VectorizerThread implements Runnable {
         this.vectorizerType = vectorizer;
     }
 
-    // I hope this works 
+    /**
+     * modify only one "slot" of the reference array to (hopefully) avoid concurrent modification errors
+     */
     @Override
     public void run() {
         this.reference[this.indexToModify] = this.vectorizerType.getVectorizedString(string, wordDictionary);

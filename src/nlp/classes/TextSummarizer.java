@@ -70,6 +70,12 @@ public class TextSummarizer {
         
         Set<String> stopWords = getStopWords();
         
+        //remove stop words from the main body of text
+        for(String s : stopWords) {
+            contentText = contentText.replaceAll(s, "");
+        }
+        
+        
         //clean data
         String[] contentSentences = stringCleaner.getSentences(contentText);
         String[] wordDictionary = stringCleaner.generateWordDictionary(contentText);

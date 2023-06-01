@@ -132,26 +132,11 @@ public class RAKERelevance implements IRelevanceMetric {
         
         int temp;
         for (int i = 0; i < keyPhraseNum; i++) {
-            temp = getMaxIndex(phraseScores);
+            temp = Utilities.getMaxIndex(phraseScores);
             keyPhrases[i] = candidatePhrases[temp];
             phraseScores[temp] = 0;
         }
         
         return keyPhrases;
-    }
-    
-    //return the index of the max of an array
-    private int getMaxIndex(double[] arr) {
-        double max = arr[0];
-        int index = 0;
-        
-        for (int i = 1; i < arr.length; i++) {
-            if (arr[i] > max) {
-                max = arr[i];
-                index = i;
-            }
-        }
-        
-        return index;
     }
 }

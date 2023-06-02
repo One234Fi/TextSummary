@@ -65,33 +65,37 @@ public class TextSummarizer {
      */
     public void start() {
         //find and read file
+        System.out.println("Picking file...");
         String filePath = ui.pickFilePath();
+        System.out.println("Parsing text...");
         String contentText = fileReader.getText(filePath);
-        
+        System.out.println("Loading stop words...");
         Set<String> stopWords = getStopWords();
-        
+        System.out.println("Removing stop words from content...");
         //remove stop words from the main body of text
         for(String s : stopWords) {
             contentText = contentText.replaceAll(s, "");
         }
         
-        
+        System.out.println("Cleaning content...");
         //clean data
         String[] contentSentences = stringCleaner.getSentences(contentText);
+        System.out.println("Determining word dictionary...");
         String[] wordDictionary = stringCleaner.generateWordDictionary(contentText);
-        
+        System.out.println("Vectorizing data...");
         //vectorize data
         double[][] vectorizedSentences = stringVectorizer.getVectorizedData(contentSentences, wordDictionary);
-        
+        System.out.println("Calculating similarity scores...");
         //check how similar each sentence is compared to all the others and divide by amt of sentences
         double[] similarityScores = similarityMetric.getSimilarityScores(vectorizedSentences);
-        
+        System.out.println("Determining relevance scores...");
         //calculate relevance scores
         double[] relevanceScores = relevanceMetric.getRelevanceScores(contentText, stopWords, contentSentences);
-        
+        System.out.println("Combining metrics...");
         //combine similarity and relevance scores
         double[] combinedScores = stringSelector.combineMetrics(similarityScores, relevanceScores);
         //select top scoring strings
+        System.out.println("Selecting output...");
         String[] output = stringSelector.selectStrings(contentSentences, combinedScores);
         for (String s : output) {
             System.out.println(s);

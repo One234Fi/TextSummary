@@ -5,6 +5,8 @@
 package nlp;
 
 import nlp.classes.*;
+import nlp.interfaces.ISimilarityMetric;
+import nlp.interfaces.IStringVectorizer;
 
 /**
  *
@@ -19,8 +21,8 @@ public class Main {
         PDFFilePicker ui = new PDFFilePicker();
         PDFFileReader reader = new PDFFileReader();
         StringCleaner cleaner = new StringCleaner();
-        StringVectorizer vectorizer = new StringVectorizer();
-        CosineSimilarity similarity = new CosineSimilarity();
+        IStringVectorizer vectorizer = new ParallelizedStringVectorizer();
+        ISimilarityMetric similarity = new ParallelizedCosineSimilarity();
         RAKERelevance relevance = new RAKERelevance();
         StringSelector selector = new StringSelector();
         

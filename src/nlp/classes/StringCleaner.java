@@ -53,7 +53,7 @@ public class StringCleaner implements IStringCleaner {
             dictionary.add(st.nextToken());
         }
         
-        return (String[]) dictionary.toArray();
+        return dictionary.toArray(String[]::new);
     }
     
 }

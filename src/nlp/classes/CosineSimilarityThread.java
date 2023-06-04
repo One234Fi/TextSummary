@@ -40,6 +40,6 @@ public class CosineSimilarityThread implements Runnable {
         for (int i = 0; i < data.length; i++) {
             sum += metricType.getSimilarity(data[indexToModify], data[i]);
         }
-        this.reference[this.indexToModify] = sum;
+        this.reference[this.indexToModify] = sum-1;
     }
 }

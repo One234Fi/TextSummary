@@ -4,11 +4,10 @@
  */
 package nlp.classes;
 
+import java.util.HashSet;
 import java.util.Set;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -17,34 +16,14 @@ import static org.junit.Assert.*;
  * @author ethan
  */
 public class RAKERelevanceTest {
-    
-    public RAKERelevanceTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of getRelevanceScores method, of class RAKERelevance.
      */
     @Test
     public void testGetRelevanceScores() {
         System.out.println("getRelevanceScores");
-        String content = "";
-        Set<String> stopWords = null;
+        String content = "this is a test string to help test this rake method. ";
+        Set<String> stopWords = Stream.of("is", "a", "to", "this").collect(Collectors.toCollection(HashSet::new));
         String[] sentences = null;
         RAKERelevance instance = new RAKERelevance();
         double[] expResult = null;

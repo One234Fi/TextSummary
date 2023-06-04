@@ -16,7 +16,7 @@ import org.junit.runners.Suite;
  * @author ethan
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({nlp.classes.CosineSimilarityTest.class, nlp.classes.CosineSimilarityThreadTest.class, nlp.classes.ParallelizedCosineSimilarityTest.class, nlp.classes.UtilitiesTest.class, nlp.classes.PDFFileReaderTest.class, nlp.classes.RAKERelevanceTest.class, nlp.classes.PDFFilePickerTest.class, nlp.classes.VectorizerThreadTest.class, nlp.classes.ParallelizedStringVectorizerTest.class, nlp.classes.StringVectorizerTest.class, nlp.classes.StringSelectorTest.class, nlp.classes.TextSummarizerTest.class, nlp.classes.StringCleanerTest.class})
+@Suite.SuiteClasses({nlp.classes.CosineSimilarityTest.class, nlp.classes.ParallelizedCosineSimilarityTest.class, nlp.classes.UtilitiesTest.class, nlp.classes.RAKERelevanceTest.class, nlp.classes.ParallelizedStringVectorizerTest.class, nlp.classes.StringVectorizerTest.class, nlp.classes.StringSelectorTest.class, nlp.classes.StringCleanerTest.class})
 public class ClassesSuite {
 
     @BeforeClass

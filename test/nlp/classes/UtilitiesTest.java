@@ -4,10 +4,6 @@
  */
 package nlp.classes;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -16,38 +12,16 @@ import static org.junit.Assert.*;
  * @author ethan
  */
 public class UtilitiesTest {
-    
-    public UtilitiesTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of getMaxIndex method, of class Utilities.
      */
     @Test
     public void testGetMaxIndex() {
         System.out.println("getMaxIndex");
-        double[] arr = null;
-        int expResult = 0;
+        double[] arr = {-0.5, 0.5, 1.5, 3.66, -4.5};
+        int expResult = 3;
         int result = Utilities.getMaxIndex(arr);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

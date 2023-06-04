@@ -4,10 +4,6 @@
  */
 package nlp.classes;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -16,40 +12,18 @@ import static org.junit.Assert.*;
  * @author ethan
  */
 public class StringVectorizerTest {
-    
-    public StringVectorizerTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of getVectorizedData method, of class StringVectorizer.
      */
     @Test
     public void testGetVectorizedData() {
         System.out.println("getVectorizedData");
-        String[] contentSentences = null;
-        String[] wordDictionary = null;
+        String[] contentSentences = {"this is a sentence", "hello world", "it is what it is"};
+        String[] wordDictionary = {"is", "a", "hello", "world", "sentence", "this", "what", "it"};
         StringVectorizer instance = new StringVectorizer();
-        double[][] expResult = null;
+        double[][] expResult = {{1,1,0,0,1,1,0,0}, {0,0,1,1,0,0,0,0}, {2,0,0,0,0,0,1,2}};
         double[][] result = instance.getVectorizedData(contentSentences, wordDictionary);
         assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -58,14 +32,14 @@ public class StringVectorizerTest {
     @Test
     public void testGetVectorizedString() {
         System.out.println("getVectorizedString");
-        String sentence = "";
-        String[] wordDictionary = null;
+        String sentence = "it is what it is";
+        String[] wordDictionary = {"is", "a", "hello", "world", "sentence", "this", "what", "it"};
         StringVectorizer instance = new StringVectorizer();
-        double[] expResult = null;
+        double[] expResult = {2,0,0,0,0,0,1,2};
         double[] result = instance.getVectorizedString(sentence, wordDictionary);
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        for (int i = 0; i < result.length; i++) {
+            assertEquals(expResult[i], result[i], 0.01);
+        }
     }
     
 }

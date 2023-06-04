@@ -4,10 +4,6 @@
  */
 package nlp.classes;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -16,40 +12,18 @@ import static org.junit.Assert.*;
  * @author ethan
  */
 public class ParallelizedStringVectorizerTest {
-    
-    public ParallelizedStringVectorizerTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of getVectorizedData method, of class ParallelizedStringVectorizer.
      */
     @Test
     public void testGetVectorizedData() {
         System.out.println("getVectorizedData");
-        String[] contentSentences = null;
-        String[] wordDictionary = null;
+        String[] contentSentences = {"this is a sentence", "hello world", "it is what it is"};
+        String[] wordDictionary = {"is", "a", "hello", "world", "sentence", "this", "what", "it"};
         ParallelizedStringVectorizer instance = new ParallelizedStringVectorizer();
-        double[][] expResult = null;
+        double[][] expResult = {{1,1,0,0,1,1,0,0}, {0,0,1,1,0,0,0,0}, {2,0,0,0,0,0,1,2}};
         double[][] result = instance.getVectorizedData(contentSentences, wordDictionary);
         assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

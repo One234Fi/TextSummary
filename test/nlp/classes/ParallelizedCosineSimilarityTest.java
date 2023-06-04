@@ -4,10 +4,6 @@
  */
 package nlp.classes;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -16,39 +12,19 @@ import static org.junit.Assert.*;
  * @author ethan
  */
 public class ParallelizedCosineSimilarityTest {
-    
-    public ParallelizedCosineSimilarityTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of getSimilarityScores method, of class ParallelizedCosineSimilarity.
      */
     @Test
     public void testGetSimilarityScores() {
         System.out.println("getSimilarityScores");
-        double[][] vectors = null;
+        double[][] vectors = {{1,1,1},{1,0,1},{0,0,1}};
         ParallelizedCosineSimilarity instance = new ParallelizedCosineSimilarity();
-        double[] expResult = null;
+        double[] expResult = {1.39,1.52,1.28};
         double[] result = instance.getSimilarityScores(vectors);
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        for (int i = 0; i < result.length; i++) {
+            assertEquals(expResult[i], result[i], 0.01);
+        }
     }
 
     /**
@@ -57,14 +33,11 @@ public class ParallelizedCosineSimilarityTest {
     @Test
     public void testGetSimilarity() {
         System.out.println("getSimilarity");
-        double[] vector1 = null;
-        double[] vector2 = null;
+        double[] vector1 = {1, 1, 1};
+        double[] vector2 = {1, 1, 1};
         ParallelizedCosineSimilarity instance = new ParallelizedCosineSimilarity();
-        double expResult = 0.0;
+        double expResult = 1;
         double result = instance.getSimilarity(vector1, vector2);
-        assertEquals(expResult, result, 0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(expResult, result, 0.0001);
     }
-    
 }

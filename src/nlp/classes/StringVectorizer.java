@@ -5,6 +5,8 @@
 package nlp.classes;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import nlp.interfaces.IStringVectorizer;
 
 /**
@@ -20,7 +22,7 @@ public class StringVectorizer implements IStringVectorizer {
      * @param wordDictionary the content words to use
      * @return an array of vectorized sentences represented as double arrays
      */
-    @Override
+    /*@Override
     public double[][] getVectorizedData(String[] contentSentences, String[] wordDictionary) {
         //Parallelize this, preferably sooner rather than later
         double[][] vectorizedSentences = new double[contentSentences.length][wordDictionary.length]; 
@@ -28,6 +30,16 @@ public class StringVectorizer implements IStringVectorizer {
             vectorizedSentences[i] = getVectorizedString(contentSentences[i], wordDictionary);
         }
         return vectorizedSentences;
+    }*/
+    
+    @Override
+    public Map<String, int[]> getVectorizedData(String[] contentSentences, String[] wordDictionary) {
+        Map<String, int[]> vectorizedContent = new HashMap<>();
+        for (String contentSentence : contentSentences) {
+            vectorizedContent.put(contentSentence, getVectorizedString(contentSentence, wordDictionary));
+        }
+        
+        return vectorizedContent;
     }
     
     /**
@@ -38,8 +50,8 @@ public class StringVectorizer implements IStringVectorizer {
      * @return a double array representing the word count for each word in the original string
      */
     @Override
-    public double[] getVectorizedString(String sentence, String[] wordDictionary) {
-        double[] vectorRepresentation = new double[wordDictionary.length];
+    public int[] getVectorizedString(String sentence, String[] wordDictionary) {
+        int[] vectorRepresentation = new int[wordDictionary.length];
         HashMap<String, Integer> wordCount = getWordOccurences(sentence.split(" "));
         
         for (int i = 0; i < vectorRepresentation.length; i++) {

@@ -4,6 +4,8 @@
  */
 package nlp.classes;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import nlp.interfaces.IStringVectorizer;
 
 /**
@@ -12,8 +14,7 @@ import nlp.interfaces.IStringVectorizer;
  */
 public class VectorizerThread implements Runnable {
     //reference to array, index to modify, the string to vectorize
-    private final double[][] reference;
-    private final int indexToModify;
+    private final Map reference;
     private final String string;
     private final String[] wordDictionary;
     private final IStringVectorizer vectorizerType;
@@ -21,14 +22,12 @@ public class VectorizerThread implements Runnable {
     /**
      * 
      * @param reference an array to write to (probably bad practice but I'll worry about it later)
-     * @param indexToModify the specific index of the array to modify
      * @param string the string that needs to be vectorized
      * @param wordDictionary the dictionary that will be used as a vector template
      * @param vectorizer the specific implementation to use
      */
-    public VectorizerThread(double[][] reference, int indexToModify, String string, String[] wordDictionary, IStringVectorizer vectorizer) {
+    public VectorizerThread(Map reference, String string, String[] wordDictionary, IStringVectorizer vectorizer) {
         this.reference = reference;
-        this.indexToModify = indexToModify;
         this.string = string;
         this.wordDictionary = wordDictionary;
         this.vectorizerType = vectorizer;
@@ -39,7 +38,7 @@ public class VectorizerThread implements Runnable {
      */
     @Override
     public void run() {
-        this.reference[this.indexToModify] = this.vectorizerType.getVectorizedString(string, wordDictionary);
+        this.reference.put(this.string, this.vectorizerType.getVectorizedString(string, wordDictionary));
     }
     
 }

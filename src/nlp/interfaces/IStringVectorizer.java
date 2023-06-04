@@ -4,11 +4,14 @@
  */
 package nlp.interfaces;
 
+import java.util.Map;
+
 /**
  *
  * @author ethan
  */
 public interface IStringVectorizer {
-    public double[][] getVectorizedData (String[] contentSentences, String[] wordDictionary);
-    public double[] getVectorizedString(String string, String[] wordDictionary);
+    //public double[][] getVectorizedData (String[] contentSentences, String[] wordDictionary);
+    public Map<String, int[]> getVectorizedData(String[] contentSentences, String[] wordDictionary);
+    public int[] getVectorizedString(String string, String[] wordDictionary);
 }

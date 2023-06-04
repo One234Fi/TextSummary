@@ -7,7 +7,9 @@ package nlp.classes;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import nlp.interfaces.*;
 
@@ -60,6 +62,8 @@ public class TextSummarizer {
         this.stringSelector = stringSelector;
     }
     
+    
+    
     /**
      * calls the methods to generate a summary
      */
@@ -83,8 +87,13 @@ public class TextSummarizer {
         System.out.println("Determining word dictionary...");
         String[] wordDictionary = stringCleaner.generateWordDictionary(contentText);
         System.out.println("Vectorizing data...");
-        //vectorize data
-        double[][] vectorizedSentences = stringVectorizer.getVectorizedData(contentSentences, wordDictionary);
+        
+        
+        //vectorize data, TODO: finish refactoring this
+        Map<String, int[]> contentVectors = stringVectorizer.getVectorizedData(contentSentences, wordDictionary);
+        Map<String, Double> sentenceScores = new HashMap<>();
+        
+        
         System.out.println("Calculating similarity scores...");
         //check how similar each sentence is compared to all the others and divide by amt of sentences
         double[] similarityScores = similarityMetric.getSimilarityScores(vectorizedSentences);

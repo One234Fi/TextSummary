@@ -4,6 +4,8 @@
  */
 package nlp.classes;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -16,12 +18,12 @@ import java.util.logging.Logger;
  */
 public class ParallelizedStringVectorizer extends StringVectorizer {
     @Override
-    public double[][] getVectorizedData(String[] contentSentences, String[] wordDictionary) {
-        double[][] vectorizedSentences = new double[contentSentences.length][wordDictionary.length];
+    public Map<String, int[]> getVectorizedData(String[] contentSentences, String[] wordDictionary) {
+        Map vectorizedContent = new ConcurrentHashMap<>();
         ExecutorService executor = Executors.newCachedThreadPool();
-        for (int i = 0; i < contentSentences.length; i++) {
+        for (String contentSentence : contentSentences) {
             //vectorizedSentences[i] = getVectorizedString(contentSentences[i], wordDictionary);
-            executor.execute(new VectorizerThread(vectorizedSentences, i, contentSentences[i], wordDictionary, this));
+            executor.execute(new VectorizerThread(vectorizedContent, contentSentence, wordDictionary, this));
         }
         executor.shutdown();
         try {
@@ -34,6 +36,6 @@ public class ParallelizedStringVectorizer extends StringVectorizer {
         } catch (InterruptedException ex) {
             Logger.getLogger(ParallelizedStringVectorizer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return vectorizedSentences;
+        return vectorizedContent;
     }
 }

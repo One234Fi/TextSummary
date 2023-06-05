@@ -30,8 +30,6 @@ public class TextSummarizer {
     private final IFileReader fileReader;
     private final IStringCleaner stringCleaner;
     private final IStringVectorizer stringVectorizer;
-    private final ISimilarityMetric similarityMetric;
-    private final IRelevanceMetric relevanceMetric;
     private final IStringSelector stringSelector;
     
     /**
@@ -50,15 +48,11 @@ public class TextSummarizer {
             IFileReader fileReader, 
             IStringCleaner stringCleaner, 
             IStringVectorizer stringVectorizer, 
-            ISimilarityMetric similarityMetric, 
-            IRelevanceMetric relevanceMetric,
             IStringSelector stringSelector) {
         this.ui = ui;
         this.fileReader = fileReader;
         this.stringCleaner = stringCleaner;
         this.stringVectorizer = stringVectorizer;
-        this.similarityMetric = similarityMetric;
-        this.relevanceMetric = relevanceMetric;
         this.stringSelector = stringSelector;
     }
     
@@ -91,24 +85,18 @@ public class TextSummarizer {
         
         //vectorize data, TODO: finish refactoring this
         Map<String, int[]> contentVectors = stringVectorizer.getVectorizedData(contentSentences, wordDictionary);
-        Map<String, Double> sentenceScores = new HashMap<>();
+        IScore cosineSimilarity = new CosineSimilarity(contentVectors);
+        StringScorer scorer = new StringScorer(contentVectors.keySet(), cosineSimilarity);
+        Map<String, Double> sentenceScores = scorer.getScores();
+        
+        System.out.println("Sentence Scores finished!");
         
         
-        System.out.println("Calculating similarity scores...");
-        //check how similar each sentence is compared to all the others and divide by amt of sentences
-        double[] similarityScores = similarityMetric.getSimilarityScores(vectorizedSentences);
-        System.out.println("Determining relevance scores...");
-        //calculate relevance scores
-        double[] relevanceScores = relevanceMetric.getRelevanceScores(contentText, stopWords, contentSentences);
-        System.out.println("Combining metrics...");
-        //combine similarity and relevance scores
-        double[] combinedScores = stringSelector.combineMetrics(similarityScores, relevanceScores);
-        //select top scoring strings
-        System.out.println("Selecting output...");
-        String[] output = stringSelector.selectStrings(contentSentences, combinedScores);
+        /*System.out.println("Selecting output...");
+        //String[] output = stringSelector.selectStrings(contentSentences, combinedScores);
         for (String s : output) {
             System.out.println(s);
-        }
+        }*/
     }
     
     private Set<String> getStopWords() {

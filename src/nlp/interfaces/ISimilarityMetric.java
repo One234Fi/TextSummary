@@ -5,6 +5,6 @@ package nlp.interfaces;
  * @author ethan
  */
 public interface ISimilarityMetric {
-    public double[] getSimilarityScores(double[][] vectors);
-    public double getSimilarity(double[] vector1, double[] vector2);
+    public double[] getSimilarityScores(int[][] vectors);
+    public double getSimilarity(int[] vector1, int[] vector2);
 }

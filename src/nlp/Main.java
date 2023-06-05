@@ -5,6 +5,7 @@
 package nlp;
 
 import nlp.classes.*;
+import nlp.interfaces.IScore;
 import nlp.interfaces.ISimilarityMetric;
 import nlp.interfaces.IStringVectorizer;
 
@@ -22,12 +23,10 @@ public class Main {
         PDFFileReader reader = new PDFFileReader();
         StringCleaner cleaner = new StringCleaner();
         IStringVectorizer vectorizer = new ParallelizedStringVectorizer();
-        ISimilarityMetric similarity = new ParallelizedCosineSimilarity();
-        RAKERelevance relevance = new RAKERelevance();
         StringSelector selector = new StringSelector();
         
         TextSummarizer textSummarizer = new TextSummarizer(
-                ui, reader, cleaner, vectorizer, similarity, relevance, selector
+                ui, reader, cleaner, vectorizer, selector
         );
         
         textSummarizer.start();

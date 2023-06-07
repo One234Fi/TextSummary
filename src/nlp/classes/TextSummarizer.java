@@ -7,7 +7,6 @@ package nlp.classes;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -68,7 +67,7 @@ public class TextSummarizer {
         System.out.println("Parsing text...");
         String contentText = fileReader.getText(filePath);
         System.out.println("Loading stop words...");
-        Set<String> stopWords = getStopWords();
+        Set<String> stopWords = Utilities.getStopWords();
         System.out.println("Removing stop words from content...");
         //remove stop words from the main body of text
         for(String s : stopWords) {
@@ -85,8 +84,9 @@ public class TextSummarizer {
         
         //vectorize data, TODO: finish refactoring this
         Map<String, int[]> contentVectors = stringVectorizer.getVectorizedData(contentSentences, wordDictionary);
-        IScore cosineSimilarity = new CosineSimilarity(contentVectors);
-        StringScorer scorer = new StringScorer(contentVectors.keySet(), cosineSimilarity);
+        IMetric cosineSimilarity = new CosineSimilarity(contentVectors);
+        IMetric RAKE = new RAKERelevance(contentText);
+        StringScorer scorer = new StringScorer(contentVectors.keySet(), cosineSimilarity, RAKE);
         Map<String, Double> sentenceScores = scorer.getScores();
         
         System.out.println("Sentence Scores finished!");
@@ -99,16 +99,5 @@ public class TextSummarizer {
         }*/
     }
     
-    private Set<String> getStopWords() {
-        Set<String> stopWords = new HashSet<>();
-        
-        try {
-            stopWords.addAll(Files.readAllLines(Paths.get("src/nlp/stopWords.txt")));
-        }
-        catch (IOException e) {
-            System.out.println(e.toString());
-        }
-        
-        return stopWords;
-    }
+    
 }

@@ -8,6 +8,6 @@ package nlp.interfaces;
  *
  * @author ethan
  */
-public interface IScore {
+public interface IMetric {
     public double getScore(String s);
 }

@@ -5,9 +5,9 @@
 package nlp;
 
 import nlp.classes.*;
-import nlp.interfaces.IScore;
 import nlp.interfaces.ISimilarityMetric;
 import nlp.interfaces.IStringVectorizer;
+import nlp.interfaces.IMetric;
 
 /**
  *

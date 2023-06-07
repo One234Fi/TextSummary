@@ -4,6 +4,12 @@
  */
 package nlp.classes;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  *
  * @author ethan
@@ -92,5 +98,18 @@ public class Utilities {
             }
         }
         return dotProduct;
+    }
+    
+    public static Set<String> getStopWords() {
+        Set<String> stopWords = new HashSet<>();
+        
+        try {
+            stopWords.addAll(Files.readAllLines(Paths.get("src/nlp/stopWords.txt")));
+        }
+        catch (IOException e) {
+            System.out.println(e.toString());
+        }
+        
+        return stopWords;
     }
 }

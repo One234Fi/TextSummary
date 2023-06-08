@@ -4,9 +4,11 @@
  */
 package nlp.classes;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import nlp.interfaces.IMetric;
 
 /**
@@ -42,6 +44,18 @@ public class StringScorer {
     }
     
     /**
+     * this is probably kind of slow
+     * @param percentage the fraction of strings to take
+     * @return an array of the top scoring strings
+     */
+    public String[] getTopStrings(double percentage) {
+        int numStrings = (int)(scores.size() * percentage);
+        String[] sortedStrings = new TreeMap<>(scores).keySet().toArray(new String[scores.size()]);
+        
+        return Arrays.copyOfRange(sortedStrings, 0, numStrings);
+    }
+    
+    /**
      * 
      * @param s a string
      * @return the string's score
@@ -57,6 +71,7 @@ public class StringScorer {
             for (IMetric score : scoreMetrics) {
                 sum += score.getScore(s);
             }
+            System.out.println("String " + s + " has a score of: " + sum);
             scores.put(s, sum);
         }
     }

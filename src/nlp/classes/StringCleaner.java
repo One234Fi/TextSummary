@@ -37,6 +37,7 @@ public class StringCleaner implements IStringCleaner {
      */
     @Override
     public String cleanString(String string) {
+        System.out.println(string.replaceAll("\\p{P}", "").trim());
         return string.replaceAll("\\p{Punct}|\\P{Print}|[0-9]", "").trim();
     }
 

@@ -4,23 +4,17 @@
  */
 package nlp.classes;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import nlp.interfaces.*;
 
 
 /**
- * select file - IUserInterface
- * extract data - IFileReader
- * clean data - IStringCleaner
- * vectorize - IStringVectorizer
- * cosine similarity scores - ISimilarityMetric
- * rake scores - IRelevanceMetric
- * determine output - Main
+ * 
  *
  * @author ethan
  */
@@ -29,7 +23,6 @@ public class TextSummarizer {
     private final IFileReader fileReader;
     private final IStringCleaner stringCleaner;
     private final IStringVectorizer stringVectorizer;
-    private final IStringSelector stringSelector;
     
     /**
      * Instantiates a text summarizer object that utilizes the specified modules
@@ -38,21 +31,16 @@ public class TextSummarizer {
      * @param fileReader
      * @param stringCleaner
      * @param stringVectorizer
-     * @param similarityMetric
-     * @param relevanceMetric
-     * @param stringSelector 
      */
     public TextSummarizer(
             IUserInterface ui, 
             IFileReader fileReader, 
             IStringCleaner stringCleaner, 
-            IStringVectorizer stringVectorizer, 
-            IStringSelector stringSelector) {
+            IStringVectorizer stringVectorizer) {
         this.ui = ui;
         this.fileReader = fileReader;
         this.stringCleaner = stringCleaner;
         this.stringVectorizer = stringVectorizer;
-        this.stringSelector = stringSelector;
     }
     
     
@@ -62,41 +50,36 @@ public class TextSummarizer {
      */
     public void start() {
         //find and read file
-        System.out.println("Picking file...");
         String filePath = ui.pickFilePath();
-        System.out.println("Parsing text...");
         String contentText = fileReader.getText(filePath);
-        System.out.println("Loading stop words...");
         Set<String> stopWords = Utilities.getStopWords();
-        System.out.println("Removing stop words from content...");
-        //remove stop words from the main body of text
-        for(String s : stopWords) {
-            contentText = contentText.replaceAll(s, "");
-        }
+        System.out.println(stopWords.toString());
         
-        System.out.println("Cleaning content...");
+        ArrayList<String> content = Stream
+                .of(contentText.toLowerCase().split(" "))
+                .collect(Collectors.toCollection(ArrayList<String>::new));
+        
+        //remove stop words from the main body of text
+        content.removeAll(stopWords);
+        
+        System.out.println(contentText);
         //clean data
         String[] contentSentences = stringCleaner.getSentences(contentText);
-        System.out.println("Determining word dictionary...");
         String[] wordDictionary = stringCleaner.generateWordDictionary(contentText);
-        System.out.println("Vectorizing data...");
-        
+        Arrays.toString(contentSentences);
+        Arrays.toString(wordDictionary);
         
         //vectorize data, TODO: finish refactoring this
         Map<String, int[]> contentVectors = stringVectorizer.getVectorizedData(contentSentences, wordDictionary);
         IMetric cosineSimilarity = new CosineSimilarity(contentVectors);
         IMetric RAKE = new RAKERelevance(contentText);
         StringScorer scorer = new StringScorer(contentVectors.keySet(), cosineSimilarity, RAKE);
-        Map<String, Double> sentenceScores = scorer.getScores();
         
-        System.out.println("Sentence Scores finished!");
-        
-        
-        /*System.out.println("Selecting output...");
-        //String[] output = stringSelector.selectStrings(contentSentences, combinedScores);
+        String[] output = scorer.getTopStrings(1.0);
         for (String s : output) {
             System.out.println(s);
-        }*/
+        }
+        
     }
     
     

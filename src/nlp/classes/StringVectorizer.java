@@ -6,7 +6,6 @@ package nlp.classes;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import nlp.interfaces.IStringVectorizer;
 
 /**

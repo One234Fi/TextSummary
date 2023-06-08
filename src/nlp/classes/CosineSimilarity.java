@@ -63,7 +63,8 @@ public class CosineSimilarity implements IMetric {
         double magnitudeProduct = Utilities.getMagnitude(vectors.get(s1)) * Utilities.getMagnitude(vectors.get(s2));
         if (magnitudeProduct != 0) {
             result /= magnitudeProduct;
-            return similarityCache.put(key, result);
+            similarityCache.put(key, result);
+            return result;
         }
         
         return 0.0;

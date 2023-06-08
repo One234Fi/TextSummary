@@ -5,9 +5,7 @@
 package nlp;
 
 import nlp.classes.*;
-import nlp.interfaces.ISimilarityMetric;
 import nlp.interfaces.IStringVectorizer;
-import nlp.interfaces.IMetric;
 
 /**
  *
@@ -23,10 +21,9 @@ public class Main {
         PDFFileReader reader = new PDFFileReader();
         StringCleaner cleaner = new StringCleaner();
         IStringVectorizer vectorizer = new ParallelizedStringVectorizer();
-        StringSelector selector = new StringSelector();
         
         TextSummarizer textSummarizer = new TextSummarizer(
-                ui, reader, cleaner, vectorizer, selector
+                ui, reader, cleaner, vectorizer
         );
         
         textSummarizer.start();

@@ -4,8 +4,8 @@
  */
 package nlp.classes;
 
-import java.text.DecimalFormat;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -15,32 +15,48 @@ import static org.junit.Assert.*;
  */
 public class CosineSimilarityTest {
     /**
-     * Test of getSimilarityScores method, of class CosineSimilarity.
-     */
-    @Test
-    public void testGetSimilarityScores() {
-        System.out.println("getSimilarityScores");
-        double[][] vectors = {{1,1,1},{1,0,1},{0,0,1}};
-        CosineSimilarity instance = new CosineSimilarity();
-        double[] expResult = {1.39,1.52,1.28};
-        double[] result = instance.getSimilarityScores(vectors);
-        for (int i = 0; i < result.length; i++) {
-            assertEquals(expResult[i], result[i]);
-        }
-    }
-
-    /**
      * Test of getSimilarity method, of class CosineSimilarity.
      */
     @Test
     public void testGetSimilarity() {
         System.out.println("getSimilarity");
-        double[] vector1 = {1, 0, 1};
-        double[] vector2 = {1, 1, 1};
-        CosineSimilarity instance = new CosineSimilarity();
-        double expResult = 0.81;
-        double result = instance.getSimilarity(vector1, vector2);
-        assertEquals(expResult, result, 0.01);
+        Map<String, int[]> vectors = new HashMap<>();
+        vectors.put("this is a sentence", new int[]{1,1,0,0,1,1,0,0});
+        vectors.put("hello world", new int[]{0,0,1,1,0,0,0,0});
+        vectors.put("it is what it is", new int[]{2,0,0,0,0,0,1,2});
+        CosineSimilarity instance = new CosineSimilarity(vectors);
+        double[] expResults = new double[]{0, 0.3333, 0};
+        double[] results = new double[]{
+            instance.getSimilarity("this is a sentence", "hello world"),
+            instance.getSimilarity("this is a sentence", "it is what it is"),
+            instance.getSimilarity("hello world", "it is what it is")
+        };
+        
+        for (int i = 0; i < expResults.length; i++) {
+            assertEquals(expResults[i], results[i], 0.001);
+        }
+    }
+
+    /**
+     * Test of getScore method, of class CosineSimilarity.
+     */
+    @Test
+    public void testGetScore() {
+        System.out.println("getScore");
+        Map<String, int[]> vectors = new HashMap<>();
+        vectors.put("this is a sentence", new int[]{1,1,0,0,1,1,0,0});
+        vectors.put("hello world", new int[]{0,0,1,1,0,0,0,0});
+        vectors.put("it is what it is", new int[]{2,0,0,0,0,0,1,2});
+        CosineSimilarity instance = new CosineSimilarity(vectors);
+        double[] expResults = new double[]{1.3333, 1, 1.3333};
+        double[] results = new double[]{
+            instance.getScore("this is a sentence"),
+            instance.getScore("hello world"),
+            instance.getScore("it is what it is")
+        };
+        for (int i = 0; i < expResults.length; i++) {
+            assertEquals(expResults[i], results[i], 0.001);
+        }
     }
     
 }

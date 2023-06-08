@@ -86,8 +86,7 @@ public class RAKERelevance implements IMetric {
         return candidates;
     }
     
-    //three code blocks could maybe be split into three functions but I don't really need to probably
-    //TODO: find a better (faster) way to do this that ideally doesn't use triple nested for loops
+    //splitting this into separate methods to make it easier to see which segments are slowing down the program
     private Map<String, Double> determineKeyPhrases(String content, Set<String> candidatePhrases) {
         List<String> contentWords = new ArrayList<>(Arrays.asList(content.split("\\W+")));
         //removeAll returns a boolean and not a list for some reason
@@ -106,8 +105,15 @@ public class RAKERelevance implements IMetric {
             }
         }
         
-        //I think using maps instead of arrays might be a good idea for the following two code blocks
-        //new double[contentWords.size()];
+        
+        Map<String, Double> keywordScores = getKeywordScores(contentWords, co_occurenceMatrix);
+        
+        Map<String, Double> phraseScores = getPhraseScores(candidatePhrases, keywordScores);
+        
+        return phraseScores;
+    }
+    
+    private Map<String, Double> getKeywordScores(List<String> contentWords, int[][]co_occurenceMatrix) {
         Map<String, Double> keywordScores = new HashMap<>();
         for (int i = 0; i < contentWords.size(); i++) {
             double sum = 0.0;
@@ -119,11 +125,11 @@ public class RAKERelevance implements IMetric {
                 keywordScores.put(contentWords.get(i), sum / co_occurenceMatrix[i][i]);
             }
         }
-        
-        //this should def use a map actually
-        //double[] phraseScores = new double[candidatePhrases.length];
+        return keywordScores;
+    }
+    
+    private Map<String, Double> getPhraseScores(Set<String> candidatePhrases, Map<String, Double> keywordScores) {
         Map<String, Double> phraseScores = new ConcurrentHashMap<>();
-        
         candidatePhrases.parallelStream().forEach(candidate -> {
             String[] candidateWords = candidate.split(" ");
             double sum = 0.0;
@@ -134,7 +140,6 @@ public class RAKERelevance implements IMetric {
             }
             phraseScores.put(candidate, sum);
         });
-        
         return phraseScores;
     }
 }

@@ -53,7 +53,7 @@ public class TextSummarizer {
         String filePath = ui.pickFilePath();
         String contentText = fileReader.getText(filePath);
         Set<String> stopWords = Utilities.getStopWords();
-        System.out.println(stopWords.toString());
+        //System.out.println(stopWords.toString());
         
         ArrayList<String> content = Stream
                 .of(contentText.toLowerCase().split(" "))
@@ -62,18 +62,15 @@ public class TextSummarizer {
         //remove stop words from the main body of text
         content.removeAll(stopWords);
         
-        System.out.println(contentText);
         //clean data
         String[] contentSentences = stringCleaner.getSentences(contentText);
         String[] wordDictionary = stringCleaner.generateWordDictionary(contentText);
-        Arrays.toString(contentSentences);
-        Arrays.toString(wordDictionary);
         
         //vectorize data, TODO: finish refactoring this
         Map<String, int[]> contentVectors = stringVectorizer.getVectorizedData(contentSentences, wordDictionary);
         IMetric cosineSimilarity = new CosineSimilarity(contentVectors);
-        IMetric RAKE = new RAKERelevance(contentText);
-        StringScorer scorer = new StringScorer(contentVectors.keySet(), cosineSimilarity, RAKE);
+        //IMetric RAKE = new RAKERelevance(contentText);
+        StringScorer scorer = new StringScorer(contentVectors.keySet(), cosineSimilarity);
         
         String[] output = scorer.getTopStrings(1.0);
         for (String s : output) {

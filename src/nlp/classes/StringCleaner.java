@@ -4,6 +4,7 @@
  */
 package nlp.classes;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -22,11 +23,10 @@ public class StringCleaner implements IStringCleaner {
      */
     @Override
     public String[] getSentences(String content) {
-        String[] sentences = content.split(".");
+        String[] sentences = content.split("\\.");
         for (int i = 0; i < sentences.length; i++) {
             sentences[i] = cleanString(sentences[i]);
         }
-        
         return sentences;
     }
 
@@ -37,7 +37,6 @@ public class StringCleaner implements IStringCleaner {
      */
     @Override
     public String cleanString(String string) {
-        System.out.println(string.replaceAll("\\p{P}", "").trim());
         return string.replaceAll("\\p{Punct}|\\P{Print}|[0-9]", "").trim();
     }
 

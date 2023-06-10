@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Set;
@@ -16,51 +15,79 @@ import java.util.concurrent.ConcurrentHashMap;
 import nlp.interfaces.IMetric;
 
 /**
- *
+ * 
  * @author ethan
  */
 public class RAKERelevance implements IMetric {
     //private String[] keyPhrases;
     private final Set<String> stopWords;
-    private final Map<String, Double> scores;
+    private final Map<String, Double> wordScores;
     private final Map<String, Double> keyPhraseScores;
+    
+    //use the individual words to count occurences and the combined words for cooccurences
+    private final Map<String, Integer> occurences;
+    private final Map<String, Integer> coOccurences;
     
     public RAKERelevance(String content) {
         stopWords = Utilities.getStopWords();
-        scores = new ConcurrentHashMap<>();
-        keyPhraseScores = generateKeyPhrases(content);
+        wordScores = new ConcurrentHashMap<>();
+        //keyPhraseScores = generateKeyPhrases(content);
+        keyPhraseScores = new ConcurrentHashMap<>();
+        occurences = new HashMap<>();
+        coOccurences = new HashMap<>();
+        start(content);
     }
     
     @Override
     public double getScore(String s) {
-        if (scores.containsKey(s)) {
-            return scores.get(s);
+        //compute the score for the sentence
+        ArrayList<String> sentence = new ArrayList<>(Arrays.asList(s.split(" ")));
+        sentence.removeAll(stopWords);
+        double score = 0.0;
+        for (String phrase : sentence) {
+            score += keyPhraseScores.getOrDefault(phrase, 0.0);
         }
-        double score = getRelevance(s);
-        scores.put(s, score);
+        
         return score;
     }
     
-    //TODO: this is probably needless abstraction that should be removed for simplicity
-    private Map<String, Double> generateKeyPhrases(String content) {
+    private void start(String content) {
         Set<String> candidates = getCandidatePhrases(content);
-        return determineKeyPhrases(content, candidates);
-    }
-    
-    /**
-     * 
-     * @param string a string to determine a relevance score for
-     * @return a relevance score for the input
-     */
-    public double getRelevance(String string) {
-        //this might be faster as a stream or something but I'll leave it for now
-        double sum = 0.0;
-        for (String phrase : keyPhraseScores.keySet()) {
-            if (string.contains(phrase)) {
-                sum += keyPhraseScores.get(phrase);
+        String[] words;
+        for (String candidate : candidates) {
+            words = candidate.split(" ");
+            if (words.length > 1) {
+                for (String word : words) {
+                    //increment the occurence count for the word
+                    occurences.put(word, occurences.getOrDefault(word, 0) + 1);
+                    coOccurences.put(word, coOccurences.getOrDefault(word, 0) + 1);
+                }
+            } else if (words.length != 0) {
+                occurences.put(words[0], occurences.getOrDefault(words[0], 0)+1);
             }
         }
-        
+    }
+    
+    //caching the word scores might be overkill since the calculation is simple
+    //will test how it impacts memory and performance later
+    public double getWordScore(String word) {
+        if (wordScores.containsKey(word)) {
+            return wordScores.get(word);
+        }
+        //compute word score using coOccurence matrix
+        return (double) coOccurences.get(word) / occurences.get(word);
+    }
+    
+    public double getPhraseScore(String phrase) {
+        if (keyPhraseScores.containsKey(phrase)) {
+            return keyPhraseScores.get(phrase);
+        }
+        //compute phrase score
+        StringTokenizer st = new StringTokenizer(phrase, " ");
+        double sum = 0.0;
+        while (st.hasMoreTokens()) {
+            sum += getWordScore(st.nextToken());
+        }
         return sum;
     }
     
@@ -72,7 +99,7 @@ public class RAKERelevance implements IMetric {
         String token;
         while (st.hasMoreTokens()) {
             token = st.nextToken();
-            if (stopWords.contains(token)) {
+            if (!stopWords.contains(token)) {
                 candidate.append(token).append(" ");
             }
             else {
@@ -84,62 +111,5 @@ public class RAKERelevance implements IMetric {
         }
         
         return candidates;
-    }
-    
-    //splitting this into separate methods to make it easier to see which segments are slowing down the program
-    private Map<String, Double> determineKeyPhrases(String content, Set<String> candidatePhrases) {
-        List<String> contentWords = new ArrayList<>(Arrays.asList(content.split("\\W+")));
-        //removeAll returns a boolean and not a list for some reason
-        contentWords.removeAll(stopWords);
-        
-        //coocurrence and coOccurence both look bad to me so I'm breaking name rules and mixing camelcase with underscores
-        int[][] co_occurenceMatrix = new int[contentWords.size()][contentWords.size()];
-        
-        for (int i = 0; i < contentWords.size(); i++) {
-            for (int j = 0; j < contentWords.size(); j++) {
-                for (String candidate : candidatePhrases) {
-                    if (candidate.contains(contentWords.get(i)) && candidate.contains(contentWords.get(j))) {
-                        co_occurenceMatrix[i][j]++;
-                    }
-                }
-            }
-        }
-        
-        
-        Map<String, Double> keywordScores = getKeywordScores(contentWords, co_occurenceMatrix);
-        
-        Map<String, Double> phraseScores = getPhraseScores(candidatePhrases, keywordScores);
-        
-        return phraseScores;
-    }
-    
-    private Map<String, Double> getKeywordScores(List<String> contentWords, int[][]co_occurenceMatrix) {
-        Map<String, Double> keywordScores = new HashMap<>();
-        for (int i = 0; i < contentWords.size(); i++) {
-            double sum = 0.0;
-            for (int j = 0; j < co_occurenceMatrix[i].length; j++) {
-                sum += co_occurenceMatrix[i][j];
-            }
-            
-            if (co_occurenceMatrix[i][i] != 0) {
-                keywordScores.put(contentWords.get(i), sum / co_occurenceMatrix[i][i]);
-            }
-        }
-        return keywordScores;
-    }
-    
-    private Map<String, Double> getPhraseScores(Set<String> candidatePhrases, Map<String, Double> keywordScores) {
-        Map<String, Double> phraseScores = new ConcurrentHashMap<>();
-        candidatePhrases.parallelStream().forEach(candidate -> {
-            String[] candidateWords = candidate.split(" ");
-            double sum = 0.0;
-            for (String s : candidateWords) {
-                if (keywordScores.get(s) != null) {
-                    sum += keywordScores.get(s);
-                }
-            }
-            phraseScores.put(candidate, sum);
-        });
-        return phraseScores;
     }
 }

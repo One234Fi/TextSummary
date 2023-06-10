@@ -71,7 +71,7 @@ public class StringScorer {
             for (IMetric score : scoreMetrics) {
                 sum += score.getScore(s);
             }
-            System.out.println("String " + s + " has a score of: " + sum);
+            //System.out.println("String " + s + " has a score of: " + sum);
             scores.put(s, sum);
         }
     }

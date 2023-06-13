@@ -6,10 +6,14 @@ package nlp.classes;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import nlp.interfaces.IMetric;
+
 
 /**
  * This class is given a collection of strings and a list of scoring metrics,
@@ -48,12 +52,26 @@ public class StringScorer {
      * @param percentage the fraction of strings to take
      * @return an array of the top scoring strings
      */
-    public String[] getTopStrings(double percentage) {
+    public List<String> getTopStrings(double percentage) {
         int numStrings = (int)(scores.size() * percentage);
-        String[] sortedStrings = new TreeMap<>(scores).keySet().toArray(new String[scores.size()]);
+        /**Comparator<Entry<String, Double>> entryCompare = 
+                (entry1, entry2) -> Double.compare(entry1.getValue(), entry2.getValue());
+        Entry<String, Double>[] entries = (Entry<String, Double>[])scores.entrySet().toArray();
+        Collections.sort(entries, entryCompare);
         
-        return Arrays.copyOfRange(sortedStrings, 0, numStrings);
+        String[] sortedStrings = new TreeMap<>(scores).keySet().toArray(new String[scores.size()]);
+        */
+        
+        List<String> sortedStrings = scores.entrySet().stream()
+                .sorted(Comparator.comparing(Entry::getValue))
+                .map(Entry::getKey)
+                .collect(Collectors.toList());
+        
+        
+        return sortedStrings.subList(0, numStrings);
     }
+    
+    
     
     /**
      * 

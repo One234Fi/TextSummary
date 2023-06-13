@@ -6,6 +6,7 @@ package nlp.classes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -71,7 +72,7 @@ public class TextSummarizer {
         StringScorer scorer = new StringScorer(contentVectors.keySet(), cosineSimilarity, RAKE);
         
         //TODO: Scorer.getTopStrings is slightly bugged, needs to be fixed
-        String[] output = scorer.getTopStrings(0.2);
+        List<String> output = scorer.getTopStrings(0.4);
         for (String s : output) {
             System.out.println(s);
         }

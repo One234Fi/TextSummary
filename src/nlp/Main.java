@@ -6,6 +6,7 @@ package nlp;
 
 import nlp.classes.*;
 import nlp.interfaces.IStringVectorizer;
+import nlp.interfaces.IUserInterface;
 
 /**
  *
@@ -17,7 +18,7 @@ public class Main {
      * 
      */
     public static void main(String[] args) {
-        PDFFilePicker ui = new PDFFilePicker();
+        IUserInterface ui = new SwingFilePicker();
         PDFFileReader reader = new PDFFileReader();
         StringCleaner cleaner = new StringCleaner();
         IStringVectorizer vectorizer = new ParallelizedStringVectorizer();

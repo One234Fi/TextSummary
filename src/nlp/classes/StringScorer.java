@@ -53,6 +53,7 @@ public class StringScorer {
      * @return an array of the top scoring strings
      */
     public List<String> getTopStrings(double percentage) {
+		int offset = (int)(scores.size() * .15);
         int numStrings = (int)(scores.size() * percentage);
         /**Comparator<Entry<String, Double>> entryCompare = 
                 (entry1, entry2) -> Double.compare(entry1.getValue(), entry2.getValue());
@@ -68,7 +69,7 @@ public class StringScorer {
                 .collect(Collectors.toList());
         
         
-        return sortedStrings.subList(0, numStrings);
+        return sortedStrings.subList(offset, numStrings);
     }
     
     

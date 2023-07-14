@@ -71,7 +71,6 @@ public class TextSummarizer {
         IMetric RAKE = new RAKERelevance(contentText);
         StringScorer scorer = new StringScorer(contentVectors.keySet(), cosineSimilarity, RAKE);
         
-        //TODO: Scorer.getTopStrings is slightly bugged, needs to be fixed
         List<String> output = scorer.getTopStrings(0.4);
         for (String s : output) {
             System.out.println(s);

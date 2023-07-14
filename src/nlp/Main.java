@@ -18,7 +18,7 @@ public class Main {
      * 
      */
     public static void main(String[] args) {
-        IUserInterface ui = new SwingFilePicker();
+        IUserInterface ui = new PDFFilePicker();
         PDFFileReader reader = new PDFFileReader();
         StringCleaner cleaner = new StringCleaner();
         IStringVectorizer vectorizer = new ParallelizedStringVectorizer();

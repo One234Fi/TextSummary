@@ -29,6 +29,7 @@ public class PDFFilePicker implements IUserInterface {
             filePath = sc.nextLine();
         }
         
+        sc.close();
         return filePath;
     }
     

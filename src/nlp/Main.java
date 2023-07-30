@@ -4,6 +4,8 @@
  */
 package nlp;
 
+import java.util.HashMap;
+
 import nlp.classes.*;
 import nlp.interfaces.IStringVectorizer;
 import nlp.interfaces.IUserInterface;
@@ -27,6 +29,34 @@ public class Main {
                 ui, reader, cleaner, vectorizer
         );
         
-        textSummarizer.start();
+        HashMap <String, String> parsedArgs = parseArgs(args);
+        textSummarizer.start(parsedArgs);
+    }
+
+    static HashMap<String, String> parseArgs(String[] args) {
+        HashMap<String, String> flags = new HashMap<>();
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].contains("-h")) {
+                printHelp();
+                System.exit(0);
+            }
+
+            if (args[i].startsWith("-")) {
+                flags.put(args[i], args[++i]);
+            }
+        }
+        return flags;
+    }
+
+    static void printHelp() {
+        System.out.println("Usage: java -jar nlpts [filepath] [-flag|option]");
+        System.out.println("Leave flags empty for default options");
+
+        System.out.println("Available options:");
+        System.out.println("\t-h, -help:\tprint this message");
+        System.out.println("\t-f [filepath]:\tredirect the output to a file");
+        System.out.println("\t-cst [0.00-1.00]\tspecify the Cosine Similarity Threshold, numbers outside of 0-1 will be rounded to either 0 or 1");
+        System.out.println("\t-rst [0.00-1.00]\tspecify the RAKE Score Threshold, numbers outside of 0-1 will be rounded to either 0 or 1");
+        System.out.println("\t-st [0.00-1.00]\tspecify the Selection Threshold, numbers outside of 0-1 will be rounded to either 0 or 1");
     }
 }

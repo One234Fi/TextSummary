@@ -26,16 +26,18 @@ public class StringScorer {
     private final Collection<String> content;
     private final IMetric[] scoreMetrics;
     private final Map<String, Double> scores;
+    private final double[] thresholds;
     
     /**
      * 
      * @param content the collection of strings to assign scores to
      * @param metrics a list of metrics used to composite string scores
      */
-    public StringScorer(Collection<String> content, IMetric... metrics) {
+    public StringScorer(Collection<String> content, double[] thresholds, IMetric... metrics) {
         this.content = content;
         scoreMetrics = metrics;
         scores = new HashMap<>();
+        this.thresholds = thresholds;
         generateScores();
     }
     
@@ -87,8 +89,8 @@ public class StringScorer {
     private void generateScores() {
         for (String s : content) {
             double sum = 0.0;
-            for (IMetric score : scoreMetrics) {
-                sum += score.getScore(s);
+            for (int i = 0; i < scoreMetrics.length; i++) {
+                sum += scoreMetrics[i].getScore(s) * thresholds[i];
             }
             //System.out.println("String " + s + " has a score of: " + sum);
             scores.put(s, sum);

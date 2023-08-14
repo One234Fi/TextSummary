@@ -105,7 +105,7 @@ public class Utilities {
         Set<String> stopWords = new HashSet<>();
         
         try {
-            stopWords.addAll(Files.readAllLines(Paths.get("src/nlp/stopWords.txt")));
+            stopWords.addAll(Files.readAllLines(Paths.get("src/main/java/One234Fi//nlp/stopWords.txt")));
         }
         catch (IOException e) {
             System.out.println(e.toString());

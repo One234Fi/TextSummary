@@ -95,6 +95,9 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
          <plugin>
               <artifactId>maven-assembly-plugin</artifactId>
               <configuration>
@@ -110,7 +113,7 @@
               </configuration>
               <executions>
                   <execution>
-                      <id>make-my-jar-with-dependencies</id>
+                      <id>make-assembly</id>
                       <phase>package</phase>
                       <goals>
                           <goal>single</goal>
@@ -118,7 +121,6 @@
                   </execution>
               </executions>
           </plugin>
-      </plugins>
-    </pluginManagement>
+    </plugins>
   </build>
 </project>

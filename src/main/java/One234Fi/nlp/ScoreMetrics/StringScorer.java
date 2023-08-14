@@ -55,13 +55,6 @@ public class StringScorer {
     public List<String> getTopStrings(double percentage) {
 		int offset = (int)(scores.size() * .15);
         int numStrings = (int)(scores.size() * percentage);
-        /**Comparator<Entry<String, Double>> entryCompare = 
-                (entry1, entry2) -> Double.compare(entry1.getValue(), entry2.getValue());
-        Entry<String, Double>[] entries = (Entry<String, Double>[])scores.entrySet().toArray();
-        Collections.sort(entries, entryCompare);
-        
-        String[] sortedStrings = new TreeMap<>(scores).keySet().toArray(new String[scores.size()]);
-        */
         
         List<String> sortedStrings = scores.entrySet().stream()
                 .sorted(Comparator.comparing(Entry::getValue))
@@ -90,7 +83,6 @@ public class StringScorer {
             for (int i = 0; i < scoreMetrics.length; i++) {
                 sum += scoreMetrics[i].getScore(s) * thresholds[i];
             }
-            //System.out.println("String " + s + " has a score of: " + sum);
             scores.put(s, sum);
         }
     }

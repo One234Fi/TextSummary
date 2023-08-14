@@ -4,6 +4,9 @@
  */
 package One234Fi.nlp.Utilities;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,15 +56,14 @@ public class TextSummarizer {
         this.stringVectorizer = stringVectorizer;
     }
     
-    
-    
     /**
      * calls the methods to generate a summary
      */
     public void start(HashMap<String, String> flags) {
-        double compositeThreshold = Double.parseDouble(flags.getOrDefault("-st", "1"));
+        double compositeThreshold = Double.parseDouble(flags.getOrDefault("-st", ".3"));
         double cst = Double.parseDouble(flags.getOrDefault("-cst", "1"));
         double rst = Double.parseDouble(flags.getOrDefault("-rst", "1"));
+        String outputDescision = flags.getOrDefault("-f", null);
 
 
         //find and read file
@@ -83,16 +85,35 @@ public class TextSummarizer {
         Map<String, int[]> contentVectors = stringVectorizer.getVectorizedData(contentSentences, wordDictionary);
         IMetric cosineSimilarity = new CosineSimilarity(contentVectors);
 
-        // a more robust solution should do this differently
         IMetric RAKE = new RAKERelevance(contentText);
         double[] thresholds = {cst, rst};
 
         StringScorer scorer = new StringScorer(contentVectors.keySet(), thresholds, cosineSimilarity, RAKE);
         
         List<String> output = scorer.getTopStrings(compositeThreshold);
-        for (String s : output) {
-            System.out.println(s);
+
+        if (outputDescision == null) {
+
+            for (String s : output) {
+                System.out.println(s);
+            }
         }
+        else {
+            //print to the file path or throw an error if the file can't be accessed
+            File f = new File(Paths.get(outputDescision).toUri());
+            try {
+                FileWriter fw = new FileWriter(f);
+                for (String s : output) {
+                    fw.write(s);
+                    fw.write("\n");
+                }
+                fw.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
         
     }
     

@@ -54,7 +54,7 @@ public class Main {
     }
 
     static void printHelp() {
-        System.out.println("Usage: java -jar nlpts [filepath] [-flag|option]");
+        System.out.println("Usage: java -jar nlpts.jar [filepath] [-flag|option]");
         System.out.println("Leave flags empty for default options");
 
         System.out.println("Available options:");

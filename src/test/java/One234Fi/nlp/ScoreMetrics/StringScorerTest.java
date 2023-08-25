@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
  */
-package nlp.classes;
+package One234Fi.nlp.ScoreMetrics;
 
+import java.util.List;
 import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -60,8 +61,8 @@ public class StringScorerTest {
         double percentage = 0.0;
         StringScorer instance = null;
         String[] expResult = null;
-        String[] result = instance.getTopStrings(percentage);
-        assertArrayEquals(expResult, result);
+        List<String> result = instance.getTopStrings(percentage);
+        assertArrayEquals(expResult, result.toArray());
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

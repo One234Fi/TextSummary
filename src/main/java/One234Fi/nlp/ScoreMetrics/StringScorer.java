@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 /**
  * This class is given a collection of strings and a list of scoring metrics,
  * then it calculates the composite scores for the strings. These scores can be
- * individually accessed through getScore() or as a whole via getScores() 
+ * individually accessed through getScore() or as a whole via getScores(). The 
+ * getTopStrings() method also provides a default selection criteria
  * 
  * @author ethan
  */
@@ -48,6 +49,9 @@ public class StringScorer {
     }
     
     /**
+     * Grabs a specified percentage of the input data, omits the top 15% of data to reduce "trash" data. 
+     * This is probably a method to look at more closely for future improvements
+     *
      * this is probably kind of slow
      * @param percentage the fraction of strings to take
      * @return an array of the top scoring strings
@@ -64,8 +68,6 @@ public class StringScorer {
         
         return sortedStrings.subList(offset, numStrings);
     }
-    
-    
     
     /**
      * 

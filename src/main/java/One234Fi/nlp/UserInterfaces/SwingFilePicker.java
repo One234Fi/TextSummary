@@ -15,6 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 /**
+ * This class will probably not be completed anytime soon. 
+ * This program wasn't really designed with a proper desktop GUI in mind
  *
  * @author ethan
  */

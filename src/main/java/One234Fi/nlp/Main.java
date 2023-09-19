@@ -62,6 +62,6 @@ public class Main {
         System.out.println("\t-f [filepath]:\tredirect the output to a file");
         System.out.println("\t-cst [0.00-1.00]\tspecify the Cosine Similarity Threshold, numbers outside of 0-1 will be rounded to either 0 or 1");
         System.out.println("\t-rst [0.00-1.00]\tspecify the RAKE Score Threshold, numbers outside of 0-1 will be rounded to either 0 or 1");
-        System.out.println("\t-st [0.00-1.00]\tspecify the Selection Threshold, numbers outside of 0-1 will be rounded to either 0 or 1");
+        System.out.println("\t-st  [0.00-1.00]\tspecify the Selection Threshold, numbers outside of 0-1 will be rounded to either 0 or 1");
     }
 }
